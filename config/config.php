@@ -1,6 +1,6 @@
 <?php
 
-//инициализация констант деррикторий
+//инициализация констант дерикторий
 define('SITE_DIR', __DIR__ . '/../');
 define('CONFIG_DIR', SITE_DIR . 'config/');
 define('DATA_DIR', SITE_DIR . 'data/');
@@ -21,4 +21,3 @@ require_once ENGINE_DIR . 'db.php';
 require_once ENGINE_DIR . 'news.php';
 require_once ENGINE_DIR . 'reviews.php';
 require_once ENGINE_DIR . 'gallery.php';
-

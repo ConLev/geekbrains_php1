@@ -8,35 +8,35 @@
  */
 function render($file, $variables = [])
 {
-	//если файл не существует, выкидываем ошибку
-	if (!is_file($file)) {
-		echo 'Template file "' . $file . '" not found';
-		exit();
-	}
+    //если файл не существует, выкидываем ошибку
+    if (!is_file($file)) {
+        echo 'Template file "' . $file . '" not found';
+        exit();
+    }
 
-	//если файл пустой, выкидываем ошибку
-	if (filesize($file) === 0) {
-		echo 'Template file "' . $file . '" is empty';
-		exit();
-	}
+    //если файл пустой, выкидываем ошибку
+    if (filesize($file) === 0) {
+        echo 'Template file "' . $file . '" is empty';
+        exit();
+    }
 
-	//получаем содержимое шаблона
-	$templateContent = file_get_contents($file);
+    //получаем содержимое шаблона
+    $templateContent = file_get_contents($file);
 
-	//если переменны не заданны, возвращаем шаблон как есть
-	if (empty($variables)) {
-		return $templateContent;
-	}
+    //если переменны не заданны, возвращаем шаблон как есть
+    if (empty($variables)) {
+        return $templateContent;
+    }
 
-	//проходимся по всем переменным
-	foreach ($variables as $key => $value) {
-		//преобразуе ключ из key в {{KEY}}
-		$key = '{{' . strtoupper($key) . '}}';
+    //проходимся по всем переменным
+    foreach ($variables as $key => $value) {
+        //преобразуе ключ из key в {{KEY}}
+        $key = '{{' . strtoupper($key) . '}}';
 
-		//заменяем все ключи в шаблоне
-		$templateContent = str_replace($key, $value, $templateContent);
-	}
+        //заменяем все ключи в шаблоне
+        $templateContent = str_replace($key, $value, $templateContent);
+    }
 
-	//возвращаем получившийся шаблон
-	return $templateContent;
+    //возвращаем получившийся шаблон
+    return $templateContent;
 }
