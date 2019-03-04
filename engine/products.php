@@ -76,7 +76,7 @@ function createProduct($name, $description, $price, $image)
 {
     //Создаем подключение к БД
     $db = createConnection();
-    //Избоавляемся от всех инъекций
+    //Избавляемся от всех инъекций
     $name = escapeString($db, $name);
     $description = escapeString($db, $description);
     $price = escapeString($db, $price);
@@ -91,6 +91,34 @@ function createProduct($name, $description, $price, $image)
 }
 
 /**
+ * Обновить товар
+ * @param $id
+ * @param $name
+ * @param $description
+ * @param $price
+ * @param $image
+ * @return bool
+ */
+function updateProduct($id, $name, $description, $price, $image)
+{
+    //Создаем подключение к БД
+    $db = createConnection();
+    //Избавляемся от всех инъекций
+    $name = escapeString($db, $name);
+    $description = escapeString($db, $description);
+    $price = escapeString($db, $price);
+    $image = escapeString($db, $image);
+
+    //Генерируем SQL запрос на обновление товара в БД
+    $sql = "UPDATE `products` SET `name` = '$name', `description` = '$description', `price` = '$price', 
+`image` = '$image' WHERE `products`.`id` = $id";
+
+
+    //Выполняем запрос
+    return execQuery($sql, $db);
+}
+
+/**
  * Удалить товар
  * @param $id
  * @return bool
@@ -99,7 +127,7 @@ function deleteProduct($id)
 {
     //Создаем подключение к БД
     $db = createConnection();
-    //Избоавляемся от всех инъекций
+    //Избавляемся от всех инъекций
     //$id = escapeString($db, $id);
 
     //Генерируем SQL запрос на удаление товара из БД

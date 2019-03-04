@@ -1,4 +1,4 @@
-<form action="/productsActions/createProduct.php" method="POST">
+<form action="" method="POST">
     <div>
         <!-- атрибут value позволяет выставить значение по умолчанию -->
         <label class="product_label">product_name:

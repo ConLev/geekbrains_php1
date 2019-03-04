@@ -13,6 +13,29 @@ if (!$id) {
     exit();
 }
 
+//?? - заменяет isset($a) ? $a : '';
+$name = $_POST['name'] ?? '';
+$description = $_POST['description'] ?? '';
+$price = $_POST['price'] ?? '';
+$image = $_POST['image'] ?? '';
+
+if ($name && $description && $price && $image) {
+//пытаемся обновить товар
+    $result = updateProduct($id, $name, $description, $price, $image);
+//        var_dump($result);
+
+//в случае успеха обнуляем поля ввода
+    if ($result) {
+        echo 'Товар обновлен';
+        $name = '';
+        $description = '';
+        $price = '';
+        $image = '';
+    } else {
+        echo 'Произошла ошибка';
+    }
+}
+
 echo render(TEMPLATES_DIR . 'index.tpl', [
     'title' => 'update_product',
     'h1' => "Товар $id",
