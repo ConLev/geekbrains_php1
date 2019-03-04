@@ -40,3 +40,82 @@ function render($file, $variables = [])
     //возвращаем получившийся шаблон
     return $templateContent;
 }
+
+/**
+ * Функция сложения чисел
+ * @param int|float $a - первое число
+ * @param int|float $b - второе число
+ * @return int|float - возвращает сумму
+ */
+function addition($a, $b)
+{
+    return $a + $b;
+}
+
+/**
+ * Функция вычитания чисел
+ * @param int|float $a - первое число
+ * @param int|float $b - второе число
+ * @return int|float - возвращает разность
+ */
+function subtraction($a, $b)
+{
+    return $a - $b;
+}
+
+/**
+ * Функция умножения чисел
+ * @param int|float $a - первое число
+ * @param int|float $b - второе число
+ * @return int|float - возвращает произведение
+ */
+function multiplication($a, $b)
+{
+    return $a * $b;
+}
+
+/**
+ * Функция деления чисел
+ * @param int|float $a - первое число
+ * @param int|float $b - второе число
+ * @return int|float - возвращает частное
+ */
+function division($a, $b)
+{
+    if (!$b) {
+        return 'Деление на "0"';
+    }
+    return ($a / $b);
+}
+
+/**
+ * Функция основных математических операций
+ * @param int|float $arg1 - первое число
+ * @param int|float $arg2 - второе число
+ * @param string $operation - выбор операции
+ * @return int|float - результат вычисления
+ */
+function mathOperation($arg1, $arg2, $operation)
+{
+    switch ($operation) {
+        case '+':
+        case 'addition':
+            return addition($arg1, $arg2);
+            break;
+        case '-':
+        case 'subtraction':
+            return subtraction($arg1, $arg2);
+            break;
+        case '*':
+        case 'multiplication':
+            return multiplication($arg1, $arg2);
+            break;
+        case '/':
+        case 'division':
+            return division($arg1, $arg2);
+            break;
+        default:
+            return '0';
+
+    }
+}

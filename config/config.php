@@ -20,4 +20,5 @@ require_once ENGINE_DIR . 'functions.php';
 require_once ENGINE_DIR . 'db.php';
 require_once ENGINE_DIR . 'news.php';
 require_once ENGINE_DIR . 'reviews.php';
+require_once ENGINE_DIR . 'products.php';
 require_once ENGINE_DIR . 'gallery.php';

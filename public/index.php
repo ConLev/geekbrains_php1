@@ -1,43 +1,91 @@
-<?php
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>lesson_6</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+<nav class="nav">
+    <ul class="top_menu">
+        <li class="top_menu_list"><a class="top_menu_link" href="/">Главная</a></li>
+        <li class="top_menu_list"><a class="top_menu_link" href="/gallery.php">Галлерея</a></li>
+        <li class="top_menu_list"><a class="top_menu_link" href="/news.php">Новости</a></li>
+        <li class="top_menu_list"><a class="top_menu_link" href="/reviews.php">Отзывы</a></li>
+        <li class="top_menu_list"><a class="top_menu_link" href="/readProducts.php">Товары</a></li>
+        <li class="top_menu_list"><a class="top_menu_link" href="/contacts.php">Контакты</a></li>
+    </ul>
+</nav>
+<div class="container">
+    <?php
 
-require_once '../config/config.php';
+    require_once '../config/config.php';
 
-echo '<pre>';
-var_dump($_POST);
-var_dump($_FILES); //тут хранится информация о загружаемых файлах
-echo '</pre>';
+    $arg1 = $_POST['arg1'] ?? '';
+    $arg2 = $_POST['arg2'] ?? '';
+    $operation = $_POST['operation'] ?? '';
 
-//user_file - имя name заданное для input типа file
-//Если $_FILES['user_file'] существует, и нет ошибок
-if (!empty($_FILES['user_file']) && !$_FILES['user_file']['error']) {
-    $file = $_FILES['user_file'];
+    $result = mathOperation((float)$arg1, (float)$arg2, $operation);
 
-    //выбираем деррикторию куда загружать изображение
-    $upload_dir = WWW_DIR . '/uploads/';
-
-    //выбираем конечное имя файла
-    $upload_file = $upload_dir . basename($file['name']);
-
-    //Пытаемся переместить файл из временного местонахождения в постоянное
-    if (move_uploaded_file($file['tmp_name'], $upload_file)) {
-        echo "Файл корректен и был успешно загружен.\n";
-    } else {
-        echo "Возможная атака с помощью файловой загрузки!\n";
+    if (isset($result)) {
+        $arg1 = '';
+        $arg2 = '';
+        $operation = '';
     }
-}
-?>
-
-<!-- показываю, что кнопка submit может так же передавать данные в POST|GET -->
-<form action="" method="POST">
-    <input type="submit" name="var1">
-    <input type="submit" name="var2">
-</form>
-
-<!-- Тип кодирования данных, enctype, ДОЛЖЕН БЫТЬ указан ИМЕННО так -->
-<form enctype="multipart/form-data" action="" method="POST">
-    <!-- Поле MAX_FILE_SIZE должно быть указано до поля загрузки файла (в байтах) -->
-    <!-- <input type="hidden" name="MAX_FILE_SIZE" value="30000"/> -->
-    <!-- Название элемента input определяет имя в массиве $_FILES -->
-    Отправить этот файл: <input name="user_file" type="file"/>
-    <input type="submit" value="Send File"/>
-</form>
+    ?>
+    <h1>lesson_6</h1>
+    <h4>Калькулятор</h4>
+    <div class="content"><span style="color: red; font-size: 18px"><?= $result ?></span>
+        <br><br>
+        <form style="display: flex" action="" method="POST">
+            <div style="padding-right: 5px">
+                <label class="text">a:
+                    <input type="text" name="arg1" value="<?= $arg1 ?>">
+                </label>
+            </div>
+            <label style="padding-right: 5px">
+                <select name="operation">
+                    <option selected value="Выберите операцию">Выберите операцию</option>
+                    <option value="+">Сложение</option>
+                    <option value="-">Вычитание</option>
+                    <option value="*">Умножение</option>
+                    <option value="/">Деление</option>
+                </select>
+            </label>
+            <div>
+                <label class="text">b:
+                    <input type="text" name="arg2" value="<?= $arg2 ?>">
+                </label>
+            </div>
+            <div>
+                <input style="margin-left: 5px" type="submit" value="=">
+            </div>
+        </form>
+        <form style="padding-top: 50px" action="" method="POST">
+            <div>
+                <label class="text">a:
+                    <input type="text" name="arg1" value="<?= $arg1 ?>">
+                </label>
+            </div>
+            <div style="padding: 5px 0">
+                <label class="text">b:
+                    <input type="text" name="arg2" value="<?= $arg2 ?>">
+                </label>
+            </div>
+            <div>
+                <input type="submit" name="operation" value="+">
+                <input type="submit" name="operation" value="-">
+                <input type="submit" name="operation" value="*">
+                <input type="submit" name="operation" value="/">
+            </div>
+        </form>
+<!--        --><?php
+//        echo '<pre>';
+//        var_dump($_POST);
+//        echo '</pre>';
+//        ?>
+    </div>
+</div>
+<footer class="footer">Все права защищены <?= date('Y') ?></footer>
+</body>
+</html>
