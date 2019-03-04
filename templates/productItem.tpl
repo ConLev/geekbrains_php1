@@ -12,7 +12,7 @@
            data-rating="☆☆☆☆☆" data-color="red" data-size="XXL" data-shipping="FREE" data-price="{{PRICE}}">Add to Cart</a>
     </div>
     <div class="item-add_bottom">
-        <a href="/productsActions/createProduct.php?id={{ID}}" class="item-add_link_bottom">Create</a>
+        <a href="/productsActions/createProduct.php" class="item-add_link_bottom">Create</a>
         <a href="/productsActions/updateProduct.php?id={{ID}}" class="item-add_link_bottom">Update</a>
         <a href="/productsActions/deleteProduct.php?id={{ID}}" class="item-add_link_bottom">Delete</a>
     </div>

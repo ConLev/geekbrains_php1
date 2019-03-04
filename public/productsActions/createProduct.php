@@ -50,10 +50,10 @@
 
     $products = getProducts();
     echo '<div class="box-product">';
-    //выводим отзывы на экран
+    //выводим продукты на экран
     foreach ($products as $product) {
         echo "<section class='item-product'>";
-        echo "<a href='#' class='product'>";
+        echo "<a href='../product.php?id={$product['id']}' class='product'>";
         echo "<img src=../{$product['image']} class='product-img' alt='product_img'>";
         echo "<div class='product-text'>";
         echo "<h5 class='product-name'>{$product['name']}</h5>";
@@ -65,6 +65,7 @@
     }
     echo '</div>';
     ?>
+
     <form action="" method="POST">
         <div>
             <!-- атрибут value позволяет выставить значение по умолчанию -->

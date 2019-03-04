@@ -22,13 +22,12 @@
     require_once '../../config/config.php';
 
     //?? - заменяет isset($a) ? $a : '';
-    $id = $_POST['id'] ?? '';
+    $id = $_GET['id'] ?? '';
 
     //пытаемся удалить товар
     $result = deleteProduct((int)$id);
-    //        var_dump($result);
 
-    //в случае успеха выводим сообщение
+    //выводим сообщение
     if ($result) {
         echo 'Товар удален';
 
@@ -37,17 +36,17 @@
     }
 
     ?>
-    <form action="" method="POST">
-        <div>
-            <!-- атрибут value позволяет выставить значение по умолчанию -->
-            <label class="product_label">product_ID:
-                <input class="product_name" type="text" name="id" placeholder="ID">
-            </label>
-        </div>
-        <div>
-            <input class="delete_submit" type="submit">
-        </div>
-    </form>
+
+<!--    <form action="" method="POST">-->
+<!--        <div>-->
+<!--            <label class="product_label">product_ID:-->
+<!--                <input class="product_id" type="text" name="id" placeholder="ID">-->
+<!--            </label>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <input class="delete_submit" type="submit">-->
+<!--        </div>-->
+<!--    </form>-->
 </div>
 <footer class="footer">Все права защищены <?= date('Y') ?></footer>
 </body>
