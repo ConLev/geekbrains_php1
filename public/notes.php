@@ -1,128 +1,69 @@
 ﻿<?php
 
-//Домашнее задание
+require_once('../config/config.php');
 
-header('Content-Type: text/html; charset=utf-8');
+$feedback_body = mysqli_real_escape_string(
+    $db_link,
+    (string)htmlspecialchars(strip_tags($_POST['review']))
+);
 
+/*
 
-// Если не помещается на 1 строку, то соблюдать правила открытия/закрытия тегов
-$regions = [
-	"Московская область" => ["Москва", "Зеленоград", "Клин"],
-	"Ленинградская область" => ["Санкт-Петербург", "Всеволожск", "Павловск"],
-	"Рязанская область" => ["Рязань", "Ряжск", "Сапожок"]
-];
+strip_tags – удаляет HTML и PHP теги. Честно говоря, это мало относится к SQL-инъекциям,
+но атаку через форму без этого тега провести можно.
 
+htmlspecialchars – производятся следующие преобразования:
+'&' (амперсанд) преобразуется в '&amp;'
+'"' (двойная кавычка) преобразуется в '&quot;' в режиме ENT_NOQUOTES is not set.
+"'" (одиночная кавычка) преобразуется в '&#039;' (или &apos;) только в режиме ENT_QUOTES.
+'<' (знак "меньше чем") преобразуется в '&lt;'
+'>' (знак "больше чем") преобразуется в '&gt;'
+(string) – строго приводим тип к строке.
+mysqli_real_escape_string – самый мощный инструмент, экранирует специальные символы в строке
+для использования в SQL выражении, используя текущий набор символов соединения.
 
-foreach ($regions as $region_name => $cities) { //неосмысленные имена
-	echo $region_name . '<br>';
+*/
 
-	$arrLength = count($regions[$region_name]);
-	for ($i = 0; $i < $arrLength; $i++) { //count внутри цикла
-		if ($i == $arrLength - 1) {
-			echo $cities[$i] . '.' . '<br>'; //не использование $value
-		} else {
-			echo $cities[$i] . ', ';
-		}
-	}
-}
+/*
 
-
-$a = 0;
-while ($a++ < 100) {
-	$result .= $a; //$result не задан
-}
-
-
-//Подключение файлов с кодом
-//include
-//require
-//include_once
-//require_once
+<!-- Тип кодирования данных, enctype, ДОЛЖЕН БЫТЬ указан ИМЕННО так -->
+<form enctype="multipart/form-data" action="__URL__" method="POST">
+    <!-- Поле MAX_FILE_SIZE должно быть указано до поля загрузки файла (в байтах) -->
+    <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
+    <!-- Название элемента input определяет имя в массиве $_FILES -->
+    Отправить этот файл: <input name="user_file" type="file" />
+    <input type="submit" value="Send File" />
+</form>
 
 
-$file = fopen("file.txt", "r");
-if (!$file) {
-	echo("Ошибка открытия файла");
-}
+$_FILES['user_file']['name'] – оригинальное имя файла на компьютере клиента.
+$_FILES['user_file']['type'] – Mime-тип файла, в случае, если браузер предоставил такую информацию.
+Пример: "image/gif". Этот mime-тип не проверяется в PHP, так что не полагайтесь на его значение без проверки.
+$_FILES['user_file']['size'] – размер в байтах принятого файла.
+$_FILES['user_file']['tmp_name'] – временное имя, с которым принятый файл был сохранен на сервере.
+$_FILES['user_file']['error'] – код ошибки, которая может возникнуть при загрузке файла.
 
-echo "Файл открыт";
-fclose($file);
 
-
-//Если не знаем размер файла
-$file = fopen("file.txt", "r");
-if (!$file) {
-	echo("Ошибка открытия файла");
+$upload_dir = WWW_ROOT . '/img/uploads/';
+$upload_file = $upload_dir . basename($_FILES['user_file']['name']);
+echo '<pre>';
+if (move_uploaded_file($_FILES['user_file']['tmp_name'], $upload_file)) {
+    echo "Файл корректен и был успешно загружен.\n";
 } else {
-	$buffer = '';
-	while (!feof($file)) {
-		$buffer .= fread($file, 1); //fgets
-	}
-	echo $buffer;
-	fclose($file);
+    echo "Возможная атака с помощью файловой загрузки!\n";
 }
 
+*/
 
-//Если размер файла не большой
-$file = fopen("file.txt", "r");
-if (!$file) {
-	echo("Ошибка открытия файла");
-} else {
-	$buffer = fread($file, filesize("file.txt"));
-	echo $buffer;
-	fclose($file);
-}
+?>
 
-
-// удобно
-echo file_get_contents("file.txt");
-
-
-// запись файлов
-$filename = "file.txt";
-file_put_contents("file.txt", "Some Data"); //FILE_APPEND
-
-
-//шаблонизатор
-function render($file, $variables = [])
-{
-	if (!is_file($file)) {
-		echo 'Template file "' . $file . '" not found';
-		exit();
-	}
-
-	if (filesize($file) === 0) {
-		echo 'Template file "' . $file . '" is empty';
-		exit();
-	}
-
-
-	$templateContent = file_get_contents($file);
-
-	if (empty($variables)) {
-		return $templateContent;
-	}
-
-	foreach ($variables as $key => $value) {
-		if (empty($value) || !is_string($value)) {
-			continue;
-		}
-
-		$key = '{{' . strtoupper($key) . '}}';
-
-		$templateContent = str_replace($key, $value, $templateContent);
-	}
-
-	return $templateContent;
-}
-
-
-echo render('../templates/index.tpl', [
-	'title' => 'Мой супер сайт',
-	'header' => 'Добро пожаловать',
-	'content' => 'Это мой первый сайт, не судите строго',
-	'footer' => date('Y')
-]);
-
-scandir('./');
-
+1) товары
+1.1) каталог - все товары - /index.php
+1.2) страница товара - /goods_item.php?id=13
+2) админка
+2.1) посмотреть товары как админ - /admin/index.php
+2.2) добавить товар - /admin/create.php
+2.3) редактировать товар
+2.4) удалить товар
+3) галерея из прошлых работ
+4) страница отзывов
