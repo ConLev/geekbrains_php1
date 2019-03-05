@@ -6,7 +6,6 @@
  */
 function getReviews()
 {
-
     $sql = "SELECT * FROM `reviews` ORDER BY `date` DESC";
 
     return getAssocResult($sql);
@@ -22,13 +21,13 @@ function insertReview($author, $content)
 {
     //Создаем подключение к БД
     $db = createConnection();
-    //Избоавляемся от всех инъекций в $author и $content
+    //Избавляемся от всех инъекций
     $author = escapeString($db, $author);
     $content = escapeString($db, $content);
 
     //Генерируем SQL запрос на добавляение в БД
     $sql = "INSERT INTO `reviews`(`author`, `comment`) VALUES ('$author', '$content')";
 
-    //Выпонляем запрос
+    //Выполняем запрос
     return execQuery($sql, $db);
 }

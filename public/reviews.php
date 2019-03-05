@@ -12,7 +12,7 @@
         <li class="top_menu_list"><a class="top_menu_link" href="/gallery.php">Галлерея</a></li>
         <li class="top_menu_list"><a class="top_menu_link" href="/news.php">Новости</a></li>
         <li class="top_menu_list"><a class="top_menu_link" href="/reviews.php">Отзывы</a></li>
-        <li class="top_menu_list"><a class="top_menu_link" href="/readProducts.php">Товары</a></li>
+        <li class="top_menu_list"><a class="top_menu_link" href="/productsActions/readProducts.php">Товары</a></li>
         <li class="top_menu_list"><a class="top_menu_link" href="/contacts.php">Контакты</a></li>
     </ul>
 </nav>
@@ -83,22 +83,17 @@
             echo "<meta http-equiv='refresh' content='0'>";
         }
         ?>
-<!--        --><?php
-//        echo '<pre>';
-//        var_dump($_POST);
-//        echo '</pre>';
-//        ?>
         <form action="" method="POST">
             <div>
                 <!-- атрибут value позволяет выставить значение по умолчанию -->
                 <label class="reviews_label">Имя:
-                    <input class="input_author" type="text" name="author" value="<?= $author ?>">
+                    <input class="input_author" type="text" name="author" value="<?= $author ?>" required>
                 </label>
             </div>
             <div>
                 <!-- для textarea значение по умолчанию выглядит так -->
                 <label class="reviews_label">Комментарий:
-                    <textarea class="input_text" name="comment" cols="30" rows="10"><?= $comment ?></textarea>
+                    <textarea class="input_text" name="comment" cols="30" rows="10" required><?= $comment ?></textarea>
                 </label>
             </div>
             <div>

@@ -12,7 +12,7 @@
         <li class="top_menu_list"><a class="top_menu_link" href="/gallery.php">Галлерея</a></li>
         <li class="top_menu_list"><a class="top_menu_link" href="/news.php">Новости</a></li>
         <li class="top_menu_list"><a class="top_menu_link" href="/reviews.php">Отзывы</a></li>
-        <li class="top_menu_list"><a class="top_menu_link" href="/readProducts.php">Товары</a></li>
+        <li class="top_menu_list"><a class="top_menu_link" href="/productsActions/readProducts.php">Товары</a></li>
         <li class="top_menu_list"><a class="top_menu_link" href="/contacts.php">Контакты</a></li>
     </ul>
 </nav>
@@ -79,11 +79,6 @@
                 <input type="submit" name="operation" value="/">
             </div>
         </form>
-<!--        --><?php
-//        echo '<pre>';
-//        var_dump($_POST);
-//        echo '</pre>';
-//        ?>
     </div>
 </div>
 <footer class="footer">Все права защищены <?= date('Y') ?></footer>

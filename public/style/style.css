@@ -92,17 +92,27 @@ h4 {
     text-align: center;
 }
 
-.reviews_label {
+.reviews_label, .product_label {
     color: #9f9f9f;
 }
 
-.input_author, .input_text {
+.input_author, .input_text, .product_id, .product_name, .product_img, .product_price {
     width: 200px;
     margin: 10px 0;
     display: block;
     border: 1px solid darkgray;
     border-radius: 5px;
     padding: 10px;
+    color: #9f9f9f;
+}
+
+.product_description {
+    margin: 10px 0;
+    display: block;
+    border: 1px solid darkgray;
+    border-radius: 5px;
+    padding: 10px;
+    color: #9f9f9f;
 }
 
 .feedback {
@@ -153,7 +163,7 @@ h4 {
     margin-bottom: 30px;
 }
 
-.reviews_submit, .reviews_reset {
+.reviews_submit, .reviews_reset, .update_submit {
     background: #9f9f9f;
     color: #fff;
     margin-right: 10px;
@@ -165,7 +175,7 @@ h4 {
     cursor: pointer;
 }
 
-.reviews_submit:hover, .reviews_reset:hover {
+.reviews_submit:hover, .reviews_reset:hover, .update_submit:hover {
     border: 1px solid #f16d7f;
     background: #f16d7f;
 
@@ -396,6 +406,11 @@ h4 {
     text-align: center;
     padding: 40px 0;
     border-bottom: 1px solid #eaeaea;
+}
+
+.my_form {
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .footer {

@@ -1,6 +1,6 @@
 <section class="item-product">
     <a href="/product.php?id={{ID}}" class="product">
-        <img class="product-img" src="{{IMAGE}}" alt="product_img">
+        <img class="product-img" src="/{{IMAGE}}" alt="product_img">
         <div class="product-text">
             <h5 class="product-name">{{NAME}}</h5>
             <span class="product-price">$ {{PRICE}}</span>

@@ -9,11 +9,8 @@ if (!$id) {
     exit();
 }
 
-//защита от инъекций
-$id = (int)$id;
-
 echo render(TEMPLATES_DIR . 'index.tpl', [
-    'title' => 'product',
+    'title' => "product $id",
     'h1' => "Товар $id",
     'content' => showProduct($id, TEMPLATES_DIR . 'product.tpl'),
     'year' => date('Y'),

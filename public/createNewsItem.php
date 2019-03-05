@@ -14,7 +14,6 @@ $content = $_POST['content'] ?? '';
 if ($title && $content) {
     //пытаемся вставить новую новость
     $result = insertItem($title, $content);
-
     //если новость добавлена обнуляем $title и $content
     if ($result) {
         echo 'Статья добавлена';
@@ -34,18 +33,21 @@ if ($content && !$title) {
 if ($title && !$content) {
     echo 'Введите контент<br>';
 }
-
 ?>
+
 <hr>
 <form action="" method="POST">
     <div>
         <!-- атрибут value позволяет выставить значение по умолчанию -->
-        Title: <input type="text" name="title" value="<?= $title ?>">
+        <label>Title:
+            <input type="text" name="title" value="<?= $title ?>">
+        </label>
     </div>
     <div>
-        Content:
         <!-- для textarea значение по умолчанию выглядит так -->
-        <textarea name="content" cols="30" rows="10"><?= $content ?></textarea>
+        <label>Content:
+            <textarea name="content" cols="30" rows="10"><?= $content ?></textarea>
+        </label>
     </div>
     <div>
         <input type="submit">

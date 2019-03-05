@@ -10,7 +10,3 @@ if (!$id) {
     echo 'id не передан';
     exit();
 }
-
-//$id = 1;
-
-var_dump(showGalleryItem($id));
