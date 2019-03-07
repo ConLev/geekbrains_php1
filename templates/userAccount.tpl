@@ -19,7 +19,12 @@
 </nav>
 <div class="container">
     <h1>{{H1}}</h1>
-    <div class="content">{{CONTENT}}</div>
+    <div class="user_account_box">
+        <span class="text">Здравствуйте, </span><span class="user_account_text">{{NAME}}</span>
+    </div>
+    <div class="user_account_box">
+        <span class="text">Ваш логин: </span><span class="user_account_text">{{LOGIN}}</span>
+    </div>
 </div>
 <footer class="footer">Все права защищены {{YEAR}}</footer>
 </body>

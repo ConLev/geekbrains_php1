@@ -92,11 +92,11 @@ h4 {
     text-align: center;
 }
 
-.reviews_label, .product_label {
+.reviews_label, .product_label, .user_account_label {
     color: #9f9f9f;
 }
 
-.input_author, .input_text, .product_id, .product_name, .product_img, .product_price {
+.input_author, .input_text, .product_id, .product_name, .product_img, .product_price, .user_account_input {
     width: 200px;
     margin: 10px 0;
     display: block;
@@ -131,8 +131,12 @@ h4 {
     margin-bottom: 30px;
 }
 
-.comment_author {
+.comment_author, .user_account_text {
     color: #f16d7f;
+}
+
+.user_account_box {
+    margin-bottom: 10px;
 }
 
 .comment_text {
@@ -163,7 +167,7 @@ h4 {
     margin-bottom: 30px;
 }
 
-.reviews_submit, .reviews_reset, .update_submit {
+.reviews_submit, .reviews_reset, .update_submit, .user_account_submit {
     background: #9f9f9f;
     color: #fff;
     margin-right: 10px;
@@ -175,7 +179,7 @@ h4 {
     cursor: pointer;
 }
 
-.reviews_submit:hover, .reviews_reset:hover, .update_submit:hover {
+.reviews_submit:hover, .reviews_reset:hover, .update_submit:hover, .user_account_submit:hover {
     border: 1px solid #f16d7f;
     background: #f16d7f;
 
@@ -603,6 +607,11 @@ h4 {
 .cart-product-remBtn:hover {
     background-color: #f16d7f;
     border: 1px solid #f16d7f;
+}
+
+.login_message {
+    margin-bottom: 10px;
+    color: red;
 }
 
 .footer {
