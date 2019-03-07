@@ -3,22 +3,22 @@
         <div>
             <!-- атрибут value позволяет выставить значение по умолчанию -->
             <label class="product_label">product id:
-                <input class="product_id" type="text" name="id" placeholder="id (int(11)" required>
+                <input class="product_id" type="text" name="id" required value="{{ID}}">
             </label>
         </div>
         <div>
             <label class="product_label">product name:
-                <input class="product_name" type="text" name="name" placeholder="name (varchar(255))" required>
+                <input class="product_name" type="text" name="name" required value="{{NAME}}">
             </label>
         </div>
         <div>
             <label class="product_label">product price:
-                <input class="product_price" type="text" name="price" placeholder="price (decimal(10,2))" required>
+                <input class="product_price" type="text" name="price" required value="{{PRICE}}">
             </label>
         </div>
         <div>
             <label class="product_label">product image:
-                <input class="product_img" type="text" name="image" placeholder="src (img/product_1.jpg)" required>
+                <input class="product_img" type="text" name="image" required value="{{IMAGE}}">
             </label>
         </div>
         <div>
@@ -28,8 +28,7 @@
     <div>
         <!-- для textarea значение по умолчанию выглядит так -->
         <label class="product_label">product description:
-            <textarea class="product_description" name="description" cols="100" rows="30"
-                      placeholder="description text" required></textarea>
+            <textarea class="product_description" name="description" cols="100" rows="30" required>{{DESCRIPTION}}</textarea>
         </label>
     </div>
 </form>

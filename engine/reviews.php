@@ -1,15 +1,14 @@
 <?php
 
 /**
- * Получить всео отзывы
+ * Получить все отзывы
  * @return array
  */
 function getReviews()
 {
+    $sql = "SELECT * FROM `reviews` ORDER BY `date` DESC";
 
-	$sql = "SELECT * FROM `reviews` ORDER BY `date` DESC";
-
-	return getAssocResult($sql);
+    return getAssocResult($sql);
 }
 
 /**
@@ -20,15 +19,15 @@ function getReviews()
  */
 function insertReview($author, $content)
 {
-	//Создаем подключение к БД
-	$db = createConnection();
-	//Избоавляемся от всех инъекций в $author и $content
-	$author = escapeString($db, $author);
-	$content = escapeString($db, $content);
+    //Создаем подключение к БД
+    $db = createConnection();
+    //Избавляемся от всех инъекций
+    $author = escapeString($db, $author);
+    $content = escapeString($db, $content);
 
-	//Генерируем SQL запрос на добавляение в БД
-	$sql = "INSERT INTO `reviews`(`author`, `comment`) VALUES ('$author', '$content')";
+    //Генерируем SQL запрос на добавляение в БД
+    $sql = "INSERT INTO `reviews`(`author`, `comment`) VALUES ('$author', '$content')";
 
-	//Выпонляем запрос
-	return execQuery($sql, $db);
+    //Выполняем запрос
+    return execQuery($sql, $db);
 }

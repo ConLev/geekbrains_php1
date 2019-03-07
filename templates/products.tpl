@@ -18,8 +18,11 @@
     </ul>
 </nav>
 <div class="container">
-    <h1>{{H1}}</h1>
-    <div class="content">{{CONTENT}}</div>
+    <article>
+        <h3 class="heading-items">Featured Items</h3>
+        <p class="tac">Shop for items based on what we featured in this week</p>
+        <div class="box-product">{{CONTENT}}</div>
+    </article>
 </div>
 <footer class="footer">Все права защищены {{YEAR}}</footer>
 </body>

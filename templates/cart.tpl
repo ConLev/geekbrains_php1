@@ -19,7 +19,21 @@
 </nav>
 <div class="container">
     <h1>{{H1}}</h1>
-    <div class="content">{{CONTENT}}</div>
+    <div class="shopping-cart_wrapper">
+        <div class="products-box-header">
+            <span>Product Details</span>
+            <span class="unite-price-header">unite Price</span>
+            <span class="quantity-header">Quantity</span>
+            <span class="shipping-header">shipping</span>
+            <span class="subtotal-header">Subtotal</span>
+            <span class="action-header">ACTION</span>
+        </div>
+        <div class="products-box">{{CONTENT}}</div>
+        <div class="shopping-cart-button">
+            <a href="/cart/clearCart.php" class="shopping-cart-button_clear">CLEAR SHOPPING CART</a>
+            <a href="/products/readProducts.php" class="shopping-cart-button_continue">CONTINUE SHOPPING</a>
+        </div>
+    </div>
 </div>
 <footer class="footer">Все права защищены {{YEAR}}</footer>
 </body>
