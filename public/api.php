@@ -140,3 +140,4 @@ if ($_POST['apiMethod'] === 'clearCart') {
 
     clearCart();
     success();
+}
