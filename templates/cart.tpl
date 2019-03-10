@@ -20,7 +20,7 @@
 </nav>
 <div class="container">
     <h1>{{H1}}</h1>
-    <p class="error_message"></p>
+    <p class="success_message"></p>
     <div class="shopping-cart_wrapper">
         <div class="products-box-header">
             <span>Product Details</span>
@@ -32,8 +32,10 @@
         </div>
         <div class="products-box">{{CONTENT}}</div>
         <div class="shopping-cart-button">
-            <a href="#" class="shopping-cart-button_clear">CLEAR SHOPPING CART</a>
-            <a href="/products/readProducts.php" class="shopping-cart-button_continue">CONTINUE SHOPPING</a>
+            <span><a href="#" class="shopping-cart-button_clear">CLEAR SHOPPING CART</a></span>
+            <span>{{CREATE_ORDER}}</span>
+            <span><a href="/products/readProducts.php"
+                     class="shopping-cart-button_continue">CONTINUE SHOPPING</a></span>
         </div>
     </div>
 </div>
@@ -42,7 +44,7 @@
 <script>
     $(document).ready(() => {
         //Инициализируем поле для сообщений
-        const $message_field = $('.error_message');
+        const $message_field = $('.success_message');
         $('.product-box-details').on('click', '.cart-product-remBtn', e => {
             e.preventDefault();
             $.post({
@@ -94,6 +96,23 @@
                 success: function (data) {
                     if (data.data) {
                         location.reload();
+                    }
+                    if (data.error) {
+                        $message_field.text(data['error_text']);
+                    }
+                }
+            });
+        });
+        $('.shopping-cart-button').on('click', '.shopping-cart-button_button_createOrder', () => {
+            $.post({
+                url: '/api.php',
+                data: {
+                    apiMethod: 'createOrder',
+                },
+                success: function (data) {
+                    if (data.data) {
+                        location.reload();
+                        // $message_field.text(data['data']);
                     }
                     if (data.error) {
                         $message_field.text(data['error_text']);

@@ -138,7 +138,9 @@ function generateOrdersPage()
 {
     //получаем по id пользователя все его заказы
     $user_id = $_SESSION['login']['id'];
-    $orders = getAssocResult("SELECT * FROM `orders` WHERE `user_id` = $user_id");
+    $sql = ($_SESSION['login']['admin']) ? $sql = "SELECT * FROM `orders`" :
+        $sql = "SELECT * FROM `orders` WHERE `user_id` = $user_id";
+    $orders = getAssocResult($sql);
 
     $result = '';
     foreach ($orders as $order) {
@@ -153,6 +155,7 @@ function generateOrdersPage()
 
         $content = '';
         $orderSum = 0;
+        $status = $order['status'];
         //генерируем элементы таблицы товаров в заказе
         foreach ($products as $product) {
             $count = $product['amount'];
@@ -181,8 +184,33 @@ function generateOrdersPage()
             'id' => $order_id,
             'content' => $content,
             'sum' => $orderSum,
-            'status' => $statuses[$order['status']]
+            'status' => $statuses[$order['status']],
+            'update_status' => ($_SESSION['login']['admin'])
+                ? "<label class='user_order_status_label'><input class='user_order_status_input' type='number' 
+min='0' max='4' value='$status' data-order_id='$order_id' name='status'/></label>"
+                : $statuses[$order['status']],
         ]);
     }
     return $result;
+}
+
+/**
+ * Функция обновления статуса заказа
+ * @param $order_id
+ * @param $status
+ * @return bool|mysqli_result
+ */
+function updateStatus($order_id, $status)
+{
+    //для безопасности приводим к числу
+    $order_id = (int)$order_id;
+    $status = (int)$status;
+
+    //Создаем подключение к БД
+    $db = createConnection();
+
+    $sql = "UPDATE `orders` SET `status` = $status WHERE `orders`.`id` = $order_id";
+
+    //Выполняем запрос
+    return execQuery($sql, $db);
 }

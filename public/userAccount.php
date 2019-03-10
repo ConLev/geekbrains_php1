@@ -12,6 +12,7 @@ if (isset($userLogin) && isset($userName)) {
         'name' => "$userName",
         'login' => "$userLogin",
         'year' => date('Y'),
+        'content' => generateOrdersPage(),
     ]);
 } else {
     header("Location: /", TRUE, 301);
