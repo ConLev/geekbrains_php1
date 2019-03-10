@@ -193,4 +193,3 @@ function loadFile($fileName, $path)
         return 0;
     }
 }
-}

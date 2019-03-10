@@ -8,8 +8,8 @@ $gallery = renderImg(TEMPLATES_DIR . 'galleryItem.tpl', $images);
 $year = date("Y");
 
 echo render(TEMPLATES_DIR . 'index.tpl', [
-    'title' => 'Gallery',
-    'h1' => 'Gallery',
+    'title' => 'lesson_5',
+    'h1' => 'lesson_5',
     'content' => $gallery,
     'year' => $year,
 ]);
