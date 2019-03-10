@@ -48,11 +48,10 @@ function showCartItem($id)
  * Функция обновления количества и суммарной стоимости товара в корзине
  * @param int $id
  * @param $quantity
- * @param $subtotal
  * @param $price
  * @return bool|mysqli_result
  */
-function updateCartItem($id, $quantity, $subtotal, $price)
+function updateCartItem($id, $quantity, $price)
 {
     //для безопасности приводим id к числу
     $id = (int)$id;
@@ -60,8 +59,7 @@ function updateCartItem($id, $quantity, $subtotal, $price)
     //Создаем подключение к БД
     $db = createConnection();
 
-    $quantity++;
-    $subtotal += $price;
+    $subtotal = $price * $quantity;
 
     $sql = "UPDATE `cart` SET `quantity` = '$quantity', `subtotal` = '$subtotal' WHERE `cart`.`id` = $id";
 

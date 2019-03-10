@@ -15,6 +15,7 @@
         <li class="top_menu_list"><a class="top_menu_link" href="/products/readProducts.php">Товары</a></li>
         <li class="top_menu_list"><a class="top_menu_link" href="/cart/viewCart.php">Корзина</a></li>
         <li class="top_menu_list"><a class="top_menu_link" href="/contacts.php">Контакты</a></li>
+        <li class="logout_list"><a class="logout_link" href="/logout.php">Выйти</a></li>
     </ul>
 </nav>
 <div class="container">
