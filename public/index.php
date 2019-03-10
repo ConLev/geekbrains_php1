@@ -1,10 +1,5 @@
 <?php
 
-require_once '../config/config.php';
+require_once __DIR__ . '/../config/config.php';
 
-
-echo render(TEMPLATES_DIR . 'index.tpl', [
-	'title' => 'Новости',
-	'h1' => 'Горячие новости',
-	'content' => ''
-]);
+include 'login.php';

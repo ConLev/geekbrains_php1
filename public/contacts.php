@@ -2,8 +2,11 @@
 
 require_once __DIR__ . '/../config/config.php';
 
+$year = date("Y");
 echo render(TEMPLATES_DIR . 'index.tpl', [
-	'title' => 'Контакты',
-	'h1' => 'Контакты',
-	'content' => render(TEMPLATES_DIR . 'contacts.tpl')
+    'title' => 'Contacts',
+    'h1' => 'Contacts',
+    //'footer' => 'Все права защищены ' . date("Y"),
+    'content' => render(TEMPLATES_DIR . 'contacts.tpl'),
+    'year' => $year,
 ]);

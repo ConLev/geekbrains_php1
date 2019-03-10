@@ -1,23 +1,27 @@
-<!doctype>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>{{TITLE}}</title>
-	<link rel="stylesheet" href="/css/style.css">
-	<script src="/js/jquery-3.3.1.min.js"></script>
-	<script src="/js/main.js"></script>
+    <meta charset="UTF-8">
+    <title>{{TITLE}}</title>
+    <link rel="stylesheet" href="/style/style.css">
 </head>
 <body>
-	<header>
-		<ul>
-			<li><a href="/">Главная</a></li>
-			<li><a href="/products/">Продукты</a></li>
-			<li><a href="/gallery.php">Галлерея</a></li>
-			<li><a href="/news.php">Новости</a></li>
-			<li><a href="/contacts.php">Контакты</a></li>
-			<li><a href="/products/cart.php">Корзина</a></li>
-		</ul>
-	</header>
-	<h1>{{H1}}</h1>
-	<div>{{CONTENT}}</div>
+<nav class="nav">
+    <ul class="top_menu">
+        <li class="top_menu_list"><a class="top_menu_link" href="/userAccount.php">Личный кабинет</a></li>
+        <li class="top_menu_list"><a class="top_menu_link" href="/gallery/gallery.php">Галлерея</a></li>
+        <li class="top_menu_list"><a class="top_menu_link" href="/news.php">Новости</a></li>
+        <li class="top_menu_list"><a class="top_menu_link" href="/reviews.php">Отзывы</a></li>
+        <li class="top_menu_list"><a class="top_menu_link" href="/products/readProducts.php">Товары</a></li>
+        <li class="top_menu_list"><a class="top_menu_link" href="/cart/viewCart.php">Корзина</a></li>
+        <li class="top_menu_list"><a class="top_menu_link" href="/contacts.php">Контакты</a></li>
+        <li class="logout_list"><a class="logout_link" href="/logout.php">Выйти</a></li>
+    </ul>
+</nav>
+<div class="container">
+    <h1>{{H1}}</h1>
+    <div class="content">{{CONTENT}}</div>
+</div>
+<footer class="footer">Все права защищены {{YEAR}}</footer>
 </body>
 </html>
