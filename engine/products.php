@@ -28,9 +28,10 @@ function getProduct($id)
 
 /**
  * Функция генерации блока товаров
+ * @param $file
  * @return string
  */
-function showProducts()
+function showProducts($file)
 {
     //инициализируем результирующую строку
     $result = '';
@@ -39,7 +40,7 @@ function showProducts()
 
     //для каждого товара
     foreach ($products as $product) {
-        $result .= render(TEMPLATES_DIR . 'productItem.tpl', $product);
+        $result .= render($file, $product);
     }
     return $result;
 }

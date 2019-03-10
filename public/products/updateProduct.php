@@ -25,7 +25,7 @@ if ($new_id && $name && $description && $price && $image) {
     $result = updateProduct($current_id, $new_id, $name, $description, $price, $image);
 //при успешном обновлении возвращаемся на страницу просмотра товаров
     if ($result) {
-        header("Location: /productsActions/readProducts.php", TRUE, 301);
+        header("Location: /products/readProducts.php", TRUE, 301);
         //очишаем кеш (id)
         header("Cache-Control: no-cache");
     } else {

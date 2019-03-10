@@ -20,7 +20,7 @@ if ($id && $name && $description && $price && $image) {
     $result = createProduct($id, $name, $description, $price, $image);
 //при успешном добавлении товара возвращаемся на страницу просмотра товаров
     if ($result) {
-        header("Location: /productsActions/readProducts.php", TRUE, 301);
+        header("Location: /products/readProducts.php", TRUE, 301);
     } else {
         $h1 = "Товар с ID = $id уже существует";
     }

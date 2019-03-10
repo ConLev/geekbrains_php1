@@ -6,4 +6,4 @@ $id = $_GET['id'] ?? '';
 
 deleteProduct((int)$id);
 
-header("Location: /productsActions/readProducts.php", TRUE, 301);
+header("Location: /products/readProducts.php", TRUE, 301);
