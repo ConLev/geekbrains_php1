@@ -131,58 +131,58 @@ function clearCart()
 }
 
 /**
- * Генерирует страницу моих заказов
+ * Генерирует страницу заказов
  * @return string
  */
-function generateMyOrdersPage()
+function generateOrdersPage()
 {
-	//получаем id пользователя и и получаем все заказы пользователя
-	$user_id = $_SESSION['login']['id'];
-	$orders = getAssocResult("SELECT * FROM `orders` WHERE `user_id` = $user_id");
+    //получаем по id пользователя все его заказы
+    $user_id = $_SESSION['login']['id'];
+    $orders = getAssocResult("SELECT * FROM `orders` WHERE `user_id` = $user_id");
 
-	$result = '';
-	foreach ($orders as $order) {
-		$order_id = $order['id'];
+    $result = '';
+    foreach ($orders as $order) {
+        $order_id = $order['id'];
 
-		//получаем продукты, которые есть в заказе
-		$products = getAssocResult("
+        //получаем товары, которые есть в заказе
+        $products = getAssocResult("
 			SELECT * FROM `orders_products` as op
 			JOIN `products` as p ON `p`.`id` = `op`.`product_id`
 			WHERE `op`.`order_id` = $order_id
 		");
 
-		$content = '';
-		$orderSum = 0;
-		//генерируем элементы таблицы товаров в заказе
-		foreach ($products as $product) {
-			$count = $product['amount'];
-			$price = $product['price'];
-			$productSum = $count * $price;
-			$content .= render(TEMPLATES_DIR . 'orderTableRow.tpl', [
-				'name' => $product['name'],
-				'id' => $product['id'],
-				'count' => $count,
-				'price' => $price,
-				'sum' => $productSum
-			]);
-			$orderSum += $productSum;
-		}
+        $content = '';
+        $orderSum = 0;
+        //генерируем элементы таблицы товаров в заказе
+        foreach ($products as $product) {
+            $count = $product['amount'];
+            $price = $product['price'];
+            $productSum = $count * $price;
+            $content .= render(TEMPLATES_DIR . 'orderTableRow.tpl', [
+                'name' => $product['name'],
+                'id' => $product['id'],
+                'count' => $count,
+                'price' => $price,
+                'sum' => $productSum
+            ]);
+            $orderSum += $productSum;
+        }
 
-		$statuses = [
-			0 => 'Заказ оформлен',
-			1 => 'Заказ собирается',
-			2 => 'Заказ готов',
-			3 => 'Заказ завершен',
-			4 => 'Заказ отменен',
-		];
+        $statuses = [
+            0 => 'Заказ оформлен',
+            1 => 'Заказ собирается',
+            2 => 'Заказ готов',
+            3 => 'Заказ завершен',
+            4 => 'Заказ отменен',
+        ];
 
-		//генерируем полную таблицу заказа
-		$result .= render(TEMPLATES_DIR . 'orderTable.tpl', [
-			'id' => $order_id,
-			'content' => $content,
-			'sum' => $orderSum,
-			'status' => $statuses[$order['status']]
-		]);
-	}
-	return $result;
+        //генерируем полную таблицу заказа
+        $result .= render(TEMPLATES_DIR . 'orderTable.tpl', [
+            'id' => $order_id,
+            'content' => $content,
+            'sum' => $orderSum,
+            'status' => $statuses[$order['status']]
+        ]);
+    }
+    return $result;
 }
