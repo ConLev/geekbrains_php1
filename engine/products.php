@@ -1,151 +1,145 @@
 <?php
 
 /**
- * Функция получени всех продуктов
+ * Функция получения всех товаров
  * @return array
  */
 function getProducts()
 {
-	$sql = "SELECT * FROM `products`";
+    $sql = "SELECT * FROM `products`";
 
-	return getAssocResult($sql);
+    return getAssocResult($sql);
 }
 
 /**
- * Функция получает один продукт по его id
+ * Функция получает один товар по его id
  * @param int $id
  * @return array|null
  */
 function getProduct($id)
 {
-	//для безопасности превращаем id в число
-	$id = (int) $id;
+    //для безопасности приводим id к числу
+    $id = (int)$id;
 
-	$sql = "SELECT * FROM `products` WHERE `id` = $id";
+    $sql = "SELECT * FROM `products` WHERE `id` = $id";
 
-	return show($sql);
+    return show($sql);
 }
 
 /**
- * Функция генерации списка продуктов
+ * Функция генерации блока товаров
+ * @param $file
  * @return string
  */
-function renderProductList()
+function showProducts($file)
 {
-	//инициализируем результирующую строку
-	$result = '';
-	//получаем все изображения
-	$products = getProducts();
+    //инициализируем результирующую строку
+    $result = '';
+    //получаем все товары
+    $products = getProducts();
 
-	//для каждого изображения
-	foreach ($products as $product) {
-		//если изображение существует
-		if(empty($product['image'])) {
-			$product['image'] = 'img/no-image.jpeg';
-		}
-		$result .= render(TEMPLATES_DIR . 'productsListItem.tpl', $product);
-	}
-	return render(TEMPLATES_DIR . 'productsList.tpl', ['list' => $result]);
-}
-
-/**
- * Генерирует страницу корзины
- * @param array $cart
- * @return string
- */
-function renderProductsCart($cart)
-{
-	if(empty($cart)) {
-		return 'корзина пуста';
-	}
-
-	//получаем айдишники товаров
-	$ids = array_keys($cart);
-
-	//генерируем запрос
-	$sql = "SELECT * FROM `products` WHERE `id` IN (" . implode(', ', $ids) . ")";
-	$products = getAssocResult($sql);
-
-
-	//инициализируем строку контента и сумму корзины
-	$content = '';
-	$cartSum = 0;
-	foreach ($products as $product) {
-		$count = $cart[$product['id']];
-		$price = $product['price'];
-		$productSum = $count * $price;
-		//генерируем элемент корзины
-		$content .= render(TEMPLATES_DIR . 'cartListItem.tpl', [
-			'name' => $product['name'],
-			'id' => $product['id'],
-			'count' => $count,
-			'price' => $price,
-			'sum' => $productSum
-		]);
-
-		$cartSum += $productSum;
-	}
-
-	return render(TEMPLATES_DIR . 'cartList.tpl', [
-		'content' => $content,
-		'sum' => $cartSum
-	]);
+    //для каждого товара
+    foreach ($products as $product) {
+        $result .= render($file, $product);
+    }
+    return $result;
 }
 
 /**
  * @param int $id
+ * @param $file
  * @return string
  */
-function showProduct($id)
+function showProduct($id, $file)
 {
-	//для безопасности превращаем id в число
-	//получаем товар
-	$product = getProduct((int) $id);
+    //для безопасности приводим id к числу
+    //получаем товар
+    $product = getProduct((int)$id);
 
-	if(!$product) {
-		return '404';
-	}
+    if (!$product) {
+        return '404';
+    }
 
-	//возвращаем render шаблона
-	return render(TEMPLATES_DIR . 'productPage.tpl', $product);
+    //возвращаем render шаблона товара
+    return render($file, $product);
 }
 
 /**
- * Создание нового продукта
- * @param string $name
- * @param string $description
- * @param float $price
- * @param array $file
+ * Функция добавления товара
+ * @param $id
+ * @param $name
+ * @param $description
+ * @param $price
+ * @param $image
  * @return bool
  */
-function insertProduct($name, $description, $price, $file)
+function createProduct($id, $name, $description, $price, $image)
 {
-	if($file) {
-		$fileName = loadFile('image', 'img/');
-	}
+    //Создаем подключение к БД
+    $db = createConnection();
+    //Избавляемся от всех инъекций
+    $id = escapeString($db, $id);
+    $name = escapeString($db, $name);
+    $description = escapeString($db, $description);
+    $price = escapeString($db, $price);
+    $image = escapeString($db, $image);
 
+    //Генерируем SQL запрос на добавляение в БД
+    $sql = "INSERT INTO `products` (`id`, `name`, `description`, `price`, `image`) VALUES ('$id', '$name', 
+'$description', '$price', '$image')";
 
-	//создаем соединение с БД
-	$db = createConnection();
-	//Избавляемся от всех инъекций в $title и $content
-	$name = escapeString($db, $name);
-	$description = escapeString($db, $description);
-	$price = (float) $price;
-
-	//генерируем SQL добавления в БД
-
-	$sql = $file
-		? "INSERT INTO `products`(`name`, `description`, `price`, `image`) VALUES ('$name', '$description', $price, '$fileName')"
-		: "INSERT INTO `products`(`name`, `description`, `price`) VALUES ('$name', '$description', $price)";
-
-	//выполняем запрос
-	return execQuery($sql, $db);
+    //Выполняем запрос
+    return execQuery($sql, $db);
 }
 
 /**
- * Генерирует страницу моих заказов
- * @return string
+ * Функция обновления товара
+ * @param $current_id
+ * @param $new_id
+ * @param $name
+ * @param $description
+ * @param $price
+ * @param $image
+ * @return bool
  */
+function updateProduct($current_id, $new_id, $name, $description, $price, $image)
+{
+    //Создаем подключение к БД
+    $db = createConnection();
+    //Избавляемся от всех инъекций
+    $current_id = escapeString($db, $current_id);
+    $new_id = escapeString($db, $new_id);
+    $name = escapeString($db, $name);
+    $description = escapeString($db, $description);
+    $price = escapeString($db, $price);
+    $image = escapeString($db, $image);
+
+    //Генерируем SQL запрос на обновление товара в БД
+    $sql = "UPDATE `products` SET `id` = '$new_id', `name` = '$name', `description` = '$description', `price` = '$price', 
+`image` = '$image' WHERE `products`.`id` = '$current_id'";
+
+    //Выполняем запрос
+    return execQuery($sql, $db);
+}
+
+/**
+ * Функция удаления товара
+ * @param $id
+ * @return bool
+ */
+function deleteProduct($id)
+{
+    //Создаем подключение к БД
+    $db = createConnection();
+    //Избавляемся от всех инъекций
+    $id = escapeString($db, $id);
+
+    //Генерируем SQL запрос на удаление товара из БД
+    $sql = "DELETE FROM `products` WHERE `products`.`id` = '$id'";
+
+    //Выполняем запрос
+    return execQuery($sql, $db);
+}
 function generateMyOrdersPage()
 {
 	//получаем id пользователя и и получаем все заказы пользователя

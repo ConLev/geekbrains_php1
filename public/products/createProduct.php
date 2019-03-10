@@ -1,45 +1,34 @@
 <?php
 
-require_once '../../config/config.php';
+require_once __DIR__ . '/../../config/config.php';
 
-echo '<pre>';
-var_dump($_POST);
-var_dump($_FILES);
-echo '</pre>';
+//echo '<pre>';
+//var_dump($_POST);
+//die;
+//echo '</pre>';
 
 //?? - заменяет isset($a) ? $a : '';
+$id = $_POST['id'] ?? '';
 $name = $_POST['name'] ?? '';
 $description = $_POST['description'] ?? '';
-$price = $_POST['price'] ?? false;
-$file = $_FILES['image'] ?? [];
+$price = $_POST['price'] ?? '';
+$image = $_POST['image'] ?? '';
+$h1 = 'Добавить товар';
 
-
-if($name || $description || $price !== false) {
-	if($name && $description && $price !== false) {
-		//пытаемся вставить новую новость
-		$result = insertProduct($name, $description, $price, $file);
-
-		//если новость добавлено обнуляем $title и $content
-		if($result) {
-			echo 'Товар добавленc<br>';
-			$name = '';
-			$description = '';
-			$price = 0;
-		} else {
-			echo 'Произошла ошибка<br>';
-		}
-	} else {
-		echo 'Недостаточно данных<br>';
-	}
-
+if ($id && $name && $description && $price && $image) {
+//пытаемся добавить товар
+    $result = createProduct($id, $name, $description, $price, $image);
+//при успешном добавлении товара возвращаемся на страницу просмотра товаров
+    if ($result) {
+        header("Location: /products/readProducts.php", TRUE, 301);
+    } else {
+        $h1 = "Товар с ID = $id уже существует";
+    }
 }
 
 echo render(TEMPLATES_DIR . 'index.tpl', [
-	'title' => 'Создать продукт',
-	'h1' => 'Создать продукт',
-	'content' => render(TEMPLATES_DIR . 'createProduct.tpl', [
-		'name' => $name,
-		'description' => $description,
-		'price' => $price
-	])
+    'title' => 'create_product',
+    'h1' => "$h1",
+    'content' => render(TEMPLATES_DIR . 'createProduct.tpl'),
+    'year' => date('Y'),
 ]);

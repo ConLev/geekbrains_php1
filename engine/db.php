@@ -6,11 +6,11 @@
  */
 function createConnection()
 {
-	//подключаемся к БД используя константы
-	$db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-	//устанавливаем кодировку
-	mysqli_query($db, "SET CHARACTER SET 'utf8'");
-	return $db;
+    //подключаемся к БД используя константы
+    $db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    //устанавливаем кодировку
+    mysqli_query($db, "SET CHARACTER SET 'utf8'");
+    return $db;
 }
 
 /**
@@ -21,17 +21,17 @@ function createConnection()
  */
 function execQuery($sql, $db = null)
 {
-	//если соединения с БД нет, создаем
-	if(!$db) {
-		$db = createConnection();
-	}
+    //если соединения с БД нет, создаем
+    if (!$db) {
+        $db = createConnection();
+    }
 
-	//выполняем запрос
-	$result = mysqli_query($db, $sql);
+    //выполняем запрос
+    $result = mysqli_query($db, $sql);
 
-	//закрываем соединение
-	mysqli_close($db);
-	return $result;
+    //закрываем соединение
+    mysqli_close($db);
+    return $result;
 }
 
 /**
@@ -43,24 +43,24 @@ function execQuery($sql, $db = null)
  */
 function getAssocResult($sql, $db = null)
 {
-	//если соединения с БД нет, создаем
-	if(!$db) {
-		$db = createConnection();
-	}
+    //если соединения с БД нет, создаем
+    if (!$db) {
+        $db = createConnection();
+    }
 
-	//выполняем запрос
-	$result = mysqli_query($db, $sql);
+    //выполняем запрос
+    $result = mysqli_query($db, $sql);
 
-	//задаем переменную с результирующими данными
-	$array_result = [];
-	//получаем по 1 строке из запроса и помещаем в $array_result
-	while ($row = mysqli_fetch_assoc($result)) {
-		$array_result[] = $row;
-	}
+    //задаем переменную с результирующими данными
+    $array_result = [];
+    //получаем по 1 строке из запроса и помещаем в $array_result
+    while ($row = mysqli_fetch_assoc($result)) {
+        $array_result[] = $row;
+    }
 
-	//закрываем соединение
-	mysqli_close($db);
-	return $array_result;
+    //закрываем соединение
+    mysqli_close($db);
+    return $array_result;
 }
 
 /**
@@ -71,16 +71,15 @@ function getAssocResult($sql, $db = null)
  */
 function show($sql, $db = null)
 {
-	//получаем массив данных
-	$result = getAssocResult($sql, $db);
-	//если массив пустой выозвращаем null
-	if(empty($result)) {
-		return null;
-	}
-	//возвращаем первый элемент
-	return $result[0];
+    //получаем массив данных
+    $result = getAssocResult($sql, $db);
+    //если массив пустой выозвращаем null
+    if (empty($result)) {
+        return null;
+    }
+    //возвращаем первый элемент
+    return $result[0];
 }
-
 
 /**
  * Функция выполняет SQL запрос в БД и пытается получить ассоцитивный массив
