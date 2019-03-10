@@ -11,6 +11,6 @@ $id = $_GET['id'];
 $img = view_img($id, TEMPLATES_DIR . 'img.tpl');
 
 echo render(TEMPLATES_DIR . 'viewImg.tpl', [
-    'title' => 'Gallery',
+    'title' => 'Галерея',
     'content' => $img,
 ]);

@@ -90,13 +90,12 @@ function show($sql, $db = null)
  */
 function escapeString($db, $string)
 {
-	//избавляемся от sql и html инъекций
-	return mysqli_real_escape_string(
-		$db,
-		(string)htmlspecialchars(strip_tags($string))
-	);
+    //избавляемся от sql и html инъекций
+    return mysqli_real_escape_string(
+        $db,
+        (string)htmlspecialchars(strip_tags($string))
+    );
 }
-
 
 /**
  * Вставляет строку и возвращается вставленный id
@@ -115,4 +114,3 @@ function insert($sql)
 	//закрываем соединение
 	mysqli_close($db);
 	return $id;
-}
