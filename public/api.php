@@ -91,23 +91,15 @@ if ($_POST['apiMethod'] === 'addToCart') {
     $price = $_POST['postData']['price'] ?? '';
     $quantity = $_POST['postData']['quantity'] ?? '';
 
-    $showCartItem = showCartItem($id);
-
-//если в корзине нет товара с полученным id
-    if (!$showCartItem['id']) {
 //пытаемся добавить товар в корзину
-        addToCart($id, $name, $price, $image, $quantity);
-        //устанавливаем новое куки
-        setcookie("cart[$id]", $quantity);
-        success("Товар с ID($id) добавлен в корзину");
-        //если товар уже есть, обновляем количество и общую стоимость
-    } else {
-        $quantity += $showCartItem['quantity'];
-        updateCartItem($id, $quantity, $price);
-        //устанавливаем новое куки
-        setcookie("cart[$id]", $quantity);
-        success("Количество товара с ID($id) в корзине $quantity шт.");
-    }
+    $cartItem = showCartItem($id);
+    addToCart($id, $name, $price, $image, $quantity);
+    $amount = (!$cartItem['id']) ? $quantity : ++$cartItem['quantity'];
+    $message = (!$cartItem['id']) ? "Товар с ID($id) добавлен в корзину" :
+        "Количество товара с ID($id) в корзине $amount шт.";
+    //устанавливаем новое куки
+    setcookie("cart[$id]", $amount);
+    success($message);
 }
 
 //Обработка метода updateCart
@@ -119,6 +111,7 @@ if ($_POST['apiMethod'] === 'updateCart') {
     $price = $_POST['postData']['price'] ?? '';
 
     updateCartItem($id, $quantity, $price);
+    setcookie("cart[$id]", $quantity);
     success();
 }
 
