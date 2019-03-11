@@ -88,8 +88,9 @@ function addToCart($id, $name, $price, $image, $quantity)
     $image = escapeString($db, $image);
 
     //Генерируем SQL запрос на добавляение в БД
-    $sql = "INSERT INTO `cart` (`id`, `name`, `price`, `image`, `quantity`, `subtotal`) VALUES ('$id', '$name', '$price', 
-'$image', '$quantity', '$price')";
+    $sql = "INSERT INTO `cart` (`id`, `name`, `price`, `image`, `quantity`, `subtotal`) 
+VALUES ('$id', '$name', '$price', '$image', '$quantity', '$price') ON DUPLICATE KEY 
+UPDATE `quantity` = `quantity` + 1, `subtotal` = `price` * `quantity`";
 
     //Выполняем запрос
     return execQuery($sql, $db);
