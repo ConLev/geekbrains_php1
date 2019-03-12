@@ -91,19 +91,15 @@ if ($_POST['apiMethod'] === 'addToCart') {
     $price = $_POST['postData']['price'] ?? '';
     $quantity = $_POST['postData']['quantity'] ?? '';
 
-    $showCartItem = showCartItem($id);
-
-//если в корзине нет товара с полученным id
-    if (!$showCartItem['id']) {
 //пытаемся добавить товар в корзину
-        addToCart($id, $name, $price, $image, $quantity);
-        success("Товар с ID($id) добавлен в корзину");
-        //если товар уже есть, обновляем количество и общую стоимость
-    } else {
-        $quantity += $showCartItem['quantity'];
-        updateCartItem($id, $quantity, $price);
-        success("Количество товара с ID($id) в корзине $quantity шт.");
-    }
+    $cartItem = showCartItem($id);
+    addToCart($id, $name, $price, $image, $quantity);
+    $amount = (!$cartItem['id']) ? $quantity : ++$cartItem['quantity'];
+    $message = (!$cartItem['id']) ? "Товар с ID($id) добавлен в корзину" :
+        "Количество товара с ID($id) в корзине $amount шт.";
+    //устанавливаем новое куки
+    setcookie("cart[$id]", $amount);
+    success($message);
 }
 
 //Обработка метода updateCart
@@ -115,6 +111,7 @@ if ($_POST['apiMethod'] === 'updateCart') {
     $price = $_POST['postData']['price'] ?? '';
 
     updateCartItem($id, $quantity, $price);
+    setcookie("cart[$id]", $quantity);
     success();
 }
 
@@ -139,5 +136,69 @@ if ($_POST['apiMethod'] === 'removeFromCart') {
 if ($_POST['apiMethod'] === 'clearCart') {
 
     clearCart();
+    success();
+}
+
+//Обработка метода createOrder
+if ($_POST['apiMethod'] === 'createOrder') {
+
+    //если пользователь не авторизован, перенаправляем его на форму аутентификации
+    if (empty($_SESSION['login'])) {
+        header('Location: /');
+    }
+
+    $user_id = (int)$_SESSION['login']['id'];
+
+//если корзина пуста выводим ошибку
+    if (empty($_COOKIE['cart'])) {
+        error("Корзина пуста");
+        exit();
+    }
+
+//генерируем запрос и получаем id вставленной строки
+    $sql = "INSERT INTO `orders` (`user_id`) VALUES ('$user_id')";
+    $orderId = insert($sql);
+
+//если строка не вставилась вызываем ошибку
+    if (!$orderId) {
+        error("Произошла ошибка");
+        exit();
+    }
+
+//генерируем запрос в БД
+    $values = [];
+    foreach ($_COOKIE['cart'] as $productId => $amount) {
+        $productId = (int)$productId;
+        $amount = (int)$amount;
+        $values[] = "($orderId, $productId, $amount)";
+    }
+
+    $values = implode(', ', $values);
+
+    $sql = "INSERT INTO `orders_products` (`order_id`, `product_id`, `amount`) VALUES $values";
+
+//выполняем запрос
+    if (execQuery($sql)) {
+        //очищаем корзину
+        clearCart();
+        //очищаем куки корзины
+        foreach ($_COOKIE['cart'] as $productId => $amount) {
+            setcookie("cart[$productId]", null, -1, '/');
+        }
+        success();
+//        success("Заказ успешно создан");
+    } else {
+        error("Произошла ошибка");
+    }
+}
+
+//Обработка метода updateStatus
+if ($_POST['apiMethod'] === 'updateStatus') {
+
+    //Получаем данные из postData
+    $orderId = $_POST['postData']['order_id'] ?? '';
+    $status = $_POST['postData']['status'] ?? '';
+
+    updateStatus($orderId, $status);
     success();
 }

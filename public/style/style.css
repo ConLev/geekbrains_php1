@@ -101,6 +101,18 @@ h4 {
     padding-top: 15px;
 }
 
+h3 {
+    color: grey;
+    text-align: left;
+    padding-bottom: 10px;
+}
+
+.order_text {
+    color: grey;
+    font-size: 16px;
+    padding-bottom: 5px;
+}
+
 .img {
     max-width: 290px;
     padding: 0 10px 10px 0;
@@ -486,7 +498,7 @@ h4 {
     justify-content: space-between;
 }
 
-.shopping-cart-button_clear {
+.shopping-cart-button_clear, .shopping-cart-button_button_createOrder {
     border: 1px solid #eaeaea;
     background-color: #ffffff;
     box-sizing: border-box;
@@ -498,7 +510,7 @@ h4 {
     padding: 16px 33px;
 }
 
-.shopping-cart-button_clear:hover {
+.shopping-cart-button_clear:hover, .shopping-cart-button_button_createOrder:hover {
     color: #ffffff;
     background-color: #f16d7f;
 }
@@ -647,6 +659,36 @@ h4 {
 .error_message {
     padding: 5px 0;
     color: red;
+}
+
+.order_table {
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.order_thead {
+    border: 1px solid #c0c0c0;
+    padding: 8px;
+    color: #f16d7f;
+}
+
+.order_td {
+    border: 1px solid #c0c0c0;
+    padding: 8px;
+    color: #656565;
+}
+
+.user_order_status_label {
+    color: #9f9f9f;
+}
+
+.user_order_status_input {
+    width: 100px;
+    margin-right: 10px;
+    border: 1px solid darkgray;
+    border-radius: 5px;
+    padding: 10px;
+    color: #9f9f9f;
 }
 
 .footer {
