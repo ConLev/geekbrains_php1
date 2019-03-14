@@ -85,21 +85,18 @@ if ($_POST['apiMethod'] === 'login') {
 if ($_POST['apiMethod'] === 'addToCart') {
 
     //Получаем данные из postData
-    $id = $_POST['postData']['id'] ?? '';
-    $image = $_POST['postData']['img'] ?? '';
-    $name = $_POST['postData']['name'] ?? '';
-    $price = $_POST['postData']['price'] ?? '';
-    $quantity = $_POST['postData']['quantity'] ?? '';
+    $product_id = $_POST['postData']['product_id'] ?? '';
+
+    $product = getProduct($product_id);
+    $price = $product['price'];
+    $discount = $product['discount'];
+    $subtotal = $price * $discount;
 
 //пытаемся добавить товар в корзину
-    $cartItem = showCartItem($id);
-    addToCart($id, $name, $price, $image, $quantity);
-    $amount = (!$cartItem['id']) ? $quantity : ++$cartItem['quantity'];
-    $message = (!$cartItem['id']) ? "Товар с ID($id) добавлен в корзину" :
-        "Количество товара с ID($id) в корзине $amount шт.";
-    //устанавливаем новое куки
-    setcookie("cart[$id]", $amount);
-    success($message);
+    addToCart($product_id, $subtotal);
+    $cartItem = showCartItem($product_id);
+    (isset($cartItem['quantity'])) ? success("Товар с ID($product_id) добавлен в корзину.")
+        : error('Что-то пошло не так');
 }
 
 //Обработка метода updateCart

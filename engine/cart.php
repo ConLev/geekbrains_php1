@@ -6,7 +6,7 @@
  */
 function getCart()
 {
-    $sql = "SELECT * FROM `cart`";
+    $sql = "SELECT * FROM `cart` as op JOIN `products` as p ON `p`.`id` = `op`.`product_id`";
 
     return getAssocResult($sql);
 }
@@ -31,15 +31,15 @@ function showCart()
 
 /**
  * Функция получает один товар из корзины по его id
- * @param int $id
+ * @param int $product_id
  * @return array|null
  */
-function showCartItem($id)
+function showCartItem($product_id)
 {
     //для безопасности приводим id к числу
-    $id = (int)$id;
+    $product_id = (int)$product_id;
 
-    $sql = "SELECT * FROM `cart` WHERE `id` = $id";
+    $sql = "SELECT * FROM `cart` WHERE `product_id` = $product_id";
 
     return show($sql);
 }
@@ -69,28 +69,21 @@ function updateCartItem($id, $quantity, $price)
 
 /**
  * Функция добавления товара в корзину
- * @param $id
- * @param $name
- * @param $price
- * @param $image
- * @param $quantity
+ * @param $product_id
+ * @param $subtotal
  * @return bool
  */
-function addToCart($id, $name, $price, $image, $quantity)
+function addToCart($product_id, $subtotal)
 {
+    //избавляемся от инъекций
+    $product_id = (int)$product_id;
+    $subtotal = (float)$subtotal;
+
     //Создаем подключение к БД
     $db = createConnection();
-    //Избавляемся от всех инъекций
-    $id = escapeString($db, $id);
-    $name = escapeString($db, $name);
-    $price = escapeString($db, $price);
-    $quantity = escapeString($db, $quantity);
-    $image = escapeString($db, $image);
 
     //Генерируем SQL запрос на добавляение в БД
-    $sql = "INSERT INTO `cart` (`id`, `name`, `price`, `image`, `quantity`, `subtotal`) 
-VALUES ('$id', '$name', '$price', '$image', '$quantity', '$price') ON DUPLICATE KEY 
-UPDATE `quantity` = `quantity` + 1, `subtotal` = `price` * `quantity`";
+    $sql = "INSERT INTO `cart` (`product_id`, `subtotal`) VALUES ($product_id, $subtotal)";
 
     //Выполняем запрос
     return execQuery($sql, $db);

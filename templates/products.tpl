@@ -39,11 +39,7 @@
                 data: {
                     apiMethod: 'addToCart',
                     postData: {
-                        id: $(e.currentTarget).data('id'),
-                        img: $(e.currentTarget).data('img'),
-                        name: $(e.currentTarget).data('name'),
-                        price: $(e.currentTarget).data('price'),
-                        quantity: $(e.currentTarget).data('quantity'),
+                        product_id: $(e.currentTarget).data('id'),
                     }
                 },
                 success: function (data) {
