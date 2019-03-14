@@ -74,7 +74,6 @@
                     postData: {
                         id: $(e.currentTarget).data('id'),
                         quantity: (e.currentTarget).value,
-                        price: $(e.currentTarget).data('price'),
                     }
                 },
                 success: function (data) {

@@ -18,8 +18,7 @@
         <span class="cart-product-value_text">$ {{PRICE}}</span>
     </div>
     <label class="cart-product-quantity">
-        <input class="cart-quantity-value" type="number" min="1" value="{{QUANTITY}}"
-               data-id={{ID}} data-price={{PRICE}}>
+        <input class="cart-quantity-value" type="number" min="1" value="{{QUANTITY}}" data-id={{ID}}>
     </label>
     <div class="cart-product-shipping">
         <span class="cart-product-value_text">FREE</span>

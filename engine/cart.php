@@ -49,19 +49,23 @@ function showCartItem($product_id)
  * @param int $id
  * @param $quantity
  * @param $price
+ * @param $discount
  * @return bool|mysqli_result
  */
-function updateCartItem($id, $quantity, $price)
+function updateCartItem($id, $quantity, $price, $discount)
 {
-    //для безопасности приводим id к числу
+    //избавляемся от инъекций
     $id = (int)$id;
+    $quantity = (int)$quantity;
+    $price = (float)$price;
+    $discount = (float)$discount;
 
     //Создаем подключение к БД
     $db = createConnection();
 
-    $subtotal = $price * $quantity;
+    $subtotal = $price * $quantity * $discount;
 
-    $sql = "UPDATE `cart` SET `quantity` = '$quantity', `subtotal` = '$subtotal' WHERE `cart`.`id` = $id";
+    $sql = "UPDATE `cart` SET `quantity` = '$quantity', `subtotal` = '$subtotal' WHERE `cart`.`product_id` = $id";
 
     //Выполняем запрос
     return execQuery($sql, $db);
@@ -102,7 +106,7 @@ function removeFromCart($id)
     $id = escapeString($db, $id);
 
     //Генерируем SQL запрос на удаление товара из БД
-    $sql = "DELETE FROM `cart` WHERE `cart`.`id` = $id";
+    $sql = "DELETE FROM `cart` WHERE `cart`.`product_id` = $id";
 
     //Выполняем запрос
     return execQuery($sql, $db);

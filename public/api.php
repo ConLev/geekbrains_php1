@@ -105,10 +105,11 @@ if ($_POST['apiMethod'] === 'updateCart') {
     //Получаем данные из postData
     $id = $_POST['postData']['id'] ?? '';
     $quantity = $_POST['postData']['quantity'] ?? '';
-    $price = $_POST['postData']['price'] ?? '';
 
-    updateCartItem($id, $quantity, $price);
-    setcookie("cart[$id]", $quantity);
+    $product = getProduct($id);
+    $price = $product['price'];
+    $discount = $product['discount'];
+    updateCartItem($id, $quantity, $price, $discount);
     success();
 }
 
@@ -121,7 +122,7 @@ if ($_POST['apiMethod'] === 'removeFromCart') {
     $showCartItem = showCartItem($id);
 
 //если в корзине нет товара с полученным id
-    if (!$showCartItem['id']) {
+    if (!$showCartItem['product_id']) {
         error("Товар с ID($id) в корзине отсутствует");
     } else {
         removeFromCart((int)$id);
