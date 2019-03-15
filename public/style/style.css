@@ -204,6 +204,10 @@ h3 {
     margin-bottom: 30px;
 }
 
+.not-view {
+    display: none;
+}
+
 .reviews_submit, .reviews_reset, .update_submit, .user_account_submit, .user_order_cancel {
     background: #9f9f9f;
     color: #fff;

@@ -53,10 +53,10 @@
         //выводим отзывы на экран
         foreach ($reviews as $review) {
             //Добавил в базу: ALTER TABLE `reviews` ADD `approved` BOOLEAN NOT NULL AFTER `date`
-            if ((array_key_exists('approved', $review))) {
-                $class = ($review['approved']) ? 'approved' : 'not-approved';
+            if (!$_SESSION['login']['admin']) {
+                $class = ($review['approved']) ? 'approved' : 'not-view';
             } else {
-                $class = 'approved';
+                $class = ($review['approved']) ? 'approved' : 'not-approved';
             }
             echo "<div class='$class'>";
             echo "<span class='comment_date'>{$review['date']}</span>";
@@ -64,10 +64,13 @@
             echo "<p class='comment_text'>{$review['comment']}</p>";
             if ((array_key_exists('approved', $review))) {
                 echo '<form action="" method="POST">';
-                if (!($review['approved'])) {
-                    echo "<button type='submit' name='approved' class='approve-btn' value='{$review['id']}'>Одобрить</button>";
+                if ($_SESSION['login']['admin']) {
+                    if (!($review['approved'])) {
+                        echo "<button type='submit' name='approved' class='approve-btn' 
+value='{$review['id']}'>Одобрить</button>";
+                    }
+                    echo "<button type='submit' name='del' class='remove-btn' value='{$review['id']}'>Удалить</button>";
                 }
-                echo "<button type='submit' name='del' class='remove-btn' value='{$review['id']}'>Удалить</button>";
                 echo '</form>';
             }
             echo '</div>';
