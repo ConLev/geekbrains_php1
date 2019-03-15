@@ -196,14 +196,20 @@ function generateOrdersPage()
         ];
 
         //генерируем полную таблицу заказа
+        $sql = "SELECT `name` FROM `orders` INNER JOIN `users` on `orders`.user_id = `users`.id
+WHERE `orders`.id = $order_id;";
+        $user = getAssocResult($sql);
+        $user_name = $user['0']['name'];
         $result .= render(TEMPLATES_DIR . 'orderTable.tpl', [
             'id' => $order_id,
+            'user_name' => $user_name,
             'content' => $content,
             'sum' => $orderSum,
             'status' => $statuses[$order['status']],
             'update_status' => ($_SESSION['login']['admin'])
                 ? "<label class='user_order_status_label'><input class='user_order_status_input' type='number' 
-min='1' max='5' value='$status' data-order_id='$order_id' name='status'/></label>"
+min='1' max='5' value='$status' data-order_id='$order_id' name='status'/></label><button class='user_order_remove' 
+data-order_id='$order_id'>Удалить</button>"
                 : "<button class='user_order_cancel' data-order_id='$order_id'>Отменить</button>",
         ]);
     }
@@ -226,6 +232,26 @@ function updateStatus($order_id, $status)
     $db = createConnection();
 
     $sql = "UPDATE `orders` SET `status` = $status WHERE `orders`.`id` = $order_id";
+
+    //Выполняем запрос
+    return execQuery($sql, $db);
+}
+
+/**
+ * Функция удаления заказа
+ * @param $order_id
+ * @return bool|mysqli_result
+ */
+function removeOrder($order_id)
+{
+    //для безопасности приводим к числу
+    $order_id = (int)$order_id;
+
+    //Создаем подключение к БД
+    $db = createConnection();
+
+    $sql = "DELETE `orders`, `orders_products` FROM `orders` INNER JOIN `orders_products`
+WHERE `orders`.id= $order_id and `orders_products`.`order_id`= $order_id;";
 
     //Выполняем запрос
     return execQuery($sql, $db);

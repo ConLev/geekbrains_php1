@@ -1,4 +1,4 @@
-<h3>Заказ #{{ID}}</h3>
+<h3>Заказ #{{ID}} Заказ оформлен на: {{USER_NAME}}</h3>
 <table class="order_table">
     <thead>
     <tr>

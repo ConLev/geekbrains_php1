@@ -201,9 +201,17 @@ if ($_POST['apiMethod'] === 'createOrder') {
 if ($_POST['apiMethod'] === 'updateStatus') {
 
     //Получаем данные из postData
-    $orderId = $_POST['postData']['order_id'] ?? '';
+    $order_id = $_POST['postData']['order_id'] ?? '';
     $status = $_POST['postData']['status'] ?? '';
 
-    updateStatus($orderId, $status);
-    success();
+    (updateStatus($order_id, $status)) ? success() : error("api: 207");
+}
+
+//Обработка метода removeOrder
+if ($_POST['apiMethod'] === 'removeOrder') {
+
+    //Получаем данные из postData
+    $order_id = $_POST['postData']['order_id'] ?? '';
+
+    (removeOrder($order_id)) ? success() : error("api: 216");
 }

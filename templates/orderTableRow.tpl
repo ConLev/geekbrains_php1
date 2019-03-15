@@ -1,4 +1,4 @@
-<tr data-id="{{ID}}">
+<tr>
     <td class="order_td">{{NAME}}</td>
     <td class="order_td">$ {{PRICE}}</td>
     <td class="order_td">{{COUNT}}</td>

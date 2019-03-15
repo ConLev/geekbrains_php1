@@ -26,6 +26,7 @@
     <div class="user_account_box">
         <span class="text">Ваш логин: </span><span class="user_account_text">{{LOGIN}}</span>
     </div>
+    <span class="error_message"></span>
     <div class="content">{{CONTENT}}</div>
 </div>
 <footer class="footer">Все права защищены {{YEAR}}</footer>
@@ -66,6 +67,26 @@
                     }
                 },
                 success: function (data) {
+                    if (data.data) {
+                        location.reload();
+                    }
+                    if (data.error) {
+                        $message_field.text(data['error_text']);
+                    }
+                }
+            });
+        });
+        $('.user_order_remove').on('click', e => {
+            $.post({
+                url: '/api.php',
+                data: {
+                    apiMethod: 'removeOrder',
+                    postData: {
+                        order_id: $(e.currentTarget).data('order_id'),
+                    }
+                },
+                success: function (data) {
+                    console.log(data);
                     if (data.data) {
                         location.reload();
                     }

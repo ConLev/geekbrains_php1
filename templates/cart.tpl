@@ -20,7 +20,7 @@
 </nav>
 <div class="container">
     <h1>{{H1}}</h1>
-    <p class="success_message"></p>
+    <p class="error_message"></p>
     <div class="shopping-cart_wrapper">
         <div class="products-box-header">
             <span>Product Details</span>
@@ -44,7 +44,7 @@
 <script>
     $(document).ready(() => {
         //Инициализируем поле для сообщений
-        const $message_field = $('.success_message');
+        const $message_field = $('.error_message');
         $('.product-box-details').on('click', '.cart-product-remBtn', e => {
             e.preventDefault();
             $.post({

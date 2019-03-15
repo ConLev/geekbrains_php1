@@ -208,7 +208,7 @@ h3 {
     display: none;
 }
 
-.reviews_submit, .reviews_reset, .update_submit, .user_account_submit, .user_order_cancel {
+.reviews_submit, .reviews_reset, .update_submit, .user_account_submit, .user_order_cancel, .user_order_remove {
     background: #9f9f9f;
     color: #fff;
     margin-right: 10px;
@@ -220,7 +220,8 @@ h3 {
     cursor: pointer;
 }
 
-.reviews_submit:hover, .reviews_reset:hover, .update_submit:hover, .user_account_submit:hover, .user_order_cancel:hover {
+.reviews_submit:hover, .reviews_reset:hover, .update_submit:hover, .user_account_submit:hover,
+.user_order_cancel:hover, .user_order_remove:hover {
     border: 1px solid #f16d7f;
     background: #f16d7f;
 }
