@@ -15,8 +15,8 @@
         <td class="order_thead">$ {{SUM}}</td>
     </tr>
     <tr>
-        <td class="order_thead">Статус заказа:</td>
-        <td class="order_thead" data-id="{{ID}}" colspan="3"> {{UPDATE_STATUS}}</td>
+        <td class="order_thead" colspan="3">Статус заказа: {{STATUS}}</td>
+        <td class="order_thead" data-id="{{ID}}" colspan="2"> {{UPDATE_STATUS}}</td>
     </tr>
     </tbody>
 </table>

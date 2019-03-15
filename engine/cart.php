@@ -2,25 +2,30 @@
 
 /**
  * Функция получения всех товаров в корзине
+ * @param $sql
  * @return array
  */
-function getCart()
+function getCart($sql)
 {
-    $sql = "SELECT * FROM `cart` as op JOIN `products` as p ON `p`.`id` = `op`.`product_id`";
-
     return getAssocResult($sql);
 }
 
 /**
  * Функция генерации блока корзины
+ * @param $user_id
  * @return string
  */
-function showCart()
+function showCart($user_id)
 {
+    //для безопасности приводим id к числу
+    $user_id = (int)$user_id;
+
     //инициализируем результирующую строку
     $result = '';
     //получаем все товары в корзине
-    $products = getCart();
+    $sql = "SELECT * FROM `cart` as op JOIN `products` as p ON `p`.`id` = `op`.`product_id`
+where `user_id` = $user_id;";
+    $products = getCart($sql);
 
     //для каждого товара
     foreach ($products as $product) {
@@ -32,29 +37,33 @@ function showCart()
 /**
  * Функция получает один товар из корзины по его id
  * @param int $product_id
+ * @param $user_id
  * @return array|null
  */
-function showCartItem($product_id)
+function showCartItem($product_id, $user_id)
 {
     //для безопасности приводим id к числу
     $product_id = (int)$product_id;
+    $user_id = (int)$user_id;
 
-    $sql = "SELECT * FROM `cart` WHERE `product_id` = $product_id";
+    $sql = "SELECT * FROM `cart` WHERE `product_id` = $product_id and `cart`.`user_id` = $user_id";
 
     return show($sql);
 }
 
 /**
  * Функция обновления количества и суммарной стоимости товара в корзине
+ * @param $user_id
  * @param int $id
  * @param $quantity
  * @param $price
  * @param $discount
  * @return bool|mysqli_result
  */
-function updateCartItem($id, $quantity, $price, $discount)
+function updateCartItem($user_id, $id, $quantity, $price, $discount)
 {
     //избавляемся от инъекций
+    $user_id = (int)$user_id;
     $id = (int)$id;
     $quantity = (int)$quantity;
     $price = (float)$price;
@@ -65,7 +74,8 @@ function updateCartItem($id, $quantity, $price, $discount)
 
     $subtotal = $price * $quantity * $discount;
 
-    $sql = "UPDATE `cart` SET `quantity` = '$quantity', `subtotal` = '$subtotal' WHERE `cart`.`product_id` = $id";
+    $sql = "UPDATE `cart` SET `quantity` = '$quantity', `subtotal` = '$subtotal' WHERE `cart`.`product_id` = $id 
+and `cart`.`user_id` = $user_id";
 
     //Выполняем запрос
     return execQuery($sql, $db);
@@ -73,13 +83,15 @@ function updateCartItem($id, $quantity, $price, $discount)
 
 /**
  * Функция добавления товара в корзину
+ * @param $user_id
  * @param $product_id
  * @param $subtotal
  * @return bool
  */
-function addToCart($product_id, $subtotal)
+function addToCart($user_id, $product_id, $subtotal)
 {
     //избавляемся от инъекций
+    $user_id = (int)$user_id;
     $product_id = (int)$product_id;
     $subtotal = (float)$subtotal;
 
@@ -87,7 +99,7 @@ function addToCart($product_id, $subtotal)
     $db = createConnection();
 
     //Генерируем SQL запрос на добавляение в БД
-    $sql = "INSERT INTO `cart` (`product_id`, `subtotal`) VALUES ($product_id, $subtotal)";
+    $sql = "INSERT INTO `cart` (`user_id`, `product_id`, `subtotal`) VALUES ($user_id, $product_id, $subtotal)";
 
     //Выполняем запрос
     return execQuery($sql, $db);
@@ -95,18 +107,20 @@ function addToCart($product_id, $subtotal)
 
 /**
  * Функция удаления товара из корзины
- * @param $id
+ * @param $product_id
+ * @param $user_id
  * @return bool
  */
-function removeFromCart($id)
+function removeFromCart($product_id, $user_id)
 {
     //Создаем подключение к БД
     $db = createConnection();
     //Избавляемся от всех инъекций
-    $id = escapeString($db, $id);
+    $product_id = escapeString($db, $product_id);
+    $user_id = escapeString($db, $user_id);
 
     //Генерируем SQL запрос на удаление товара из БД
-    $sql = "DELETE FROM `cart` WHERE `cart`.`product_id` = $id";
+    $sql = "DELETE FROM `cart` WHERE `cart`.`product_id` = $product_id and `cart`.`user_id` = $user_id";
 
     //Выполняем запрос
     return execQuery($sql, $db);
@@ -114,15 +128,19 @@ function removeFromCart($id)
 
 /**
  * Функция очистки корзины
+ * @param $user_id
  * @return bool
  */
-function clearCart()
+function clearCart($user_id)
 {
+    //избавляемся от инъекций
+    $user_id = (int)$user_id;
+
     //Создаем подключение к БД
     $db = createConnection();
 
     //Генерируем SQL запрос на очистку корзины
-    $sql = "TRUNCATE TABLE `cart`";
+    $sql = "DELETE FROM `cart` WHERE `cart`.`user_id` = $user_id";
 
     //Выполняем запрос
     return execQuery($sql, $db);
@@ -157,7 +175,7 @@ function generateOrdersPage()
         //генерируем элементы таблицы товаров в заказе
         foreach ($products as $product) {
             $count = $product['amount'];
-            $price = $product['price'];
+            $price = $product['price'] * $product['discount'];
             $productSum = $count * $price;
             $content .= render(TEMPLATES_DIR . 'orderTableRow.tpl', [
                 'name' => $product['name'],
@@ -170,11 +188,11 @@ function generateOrdersPage()
         }
 
         $statuses = [
-            0 => 'Заказ оформлен',
-            1 => 'Заказ собирается',
-            2 => 'Заказ готов',
-            3 => 'Заказ завершен',
-            4 => 'Заказ отменен',
+            1 => 'Заказ оформлен',
+            2 => 'Заказ собирается',
+            3 => 'Заказ готов',
+            4 => 'Заказ завершен',
+            5 => 'Заказ отменен',
         ];
 
         //генерируем полную таблицу заказа
@@ -185,8 +203,8 @@ function generateOrdersPage()
             'status' => $statuses[$order['status']],
             'update_status' => ($_SESSION['login']['admin'])
                 ? "<label class='user_order_status_label'><input class='user_order_status_input' type='number' 
-min='0' max='4' value='$status' data-order_id='$order_id' name='status'/></label>"
-                : $statuses[$order['status']],
+min='1' max='5' value='$status' data-order_id='$order_id' name='status'/></label>"
+                : "<button class='user_order_cancel' data-order_id='$order_id'>Отменить</button>",
         ]);
     }
     return $result;

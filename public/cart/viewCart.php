@@ -8,6 +8,6 @@ echo render(TEMPLATES_DIR . 'cart.tpl', [
     'create_order' => empty($_SESSION['login'])
         ? '<a href="/" class="shopping-cart-button_button_createOrder">Log in</a>'
         : '<a href="#" class="shopping-cart-button_button_createOrder">Create order</a>',
-    'content' => showCart(),
+    'content' => showCart($_SESSION['login']['id']),
     'year' => date('Y'),
 ]);

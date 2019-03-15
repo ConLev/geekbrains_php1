@@ -55,6 +55,26 @@
                 }
             });
         });
+        $('.user_order_cancel').on('click', e => {
+            $.post({
+                url: '/api.php',
+                data: {
+                    apiMethod: 'updateStatus',
+                    postData: {
+                        order_id: $(e.currentTarget).data('order_id'),
+                        status: 5,
+                    }
+                },
+                success: function (data) {
+                    if (data.data) {
+                        location.reload();
+                    }
+                    if (data.error) {
+                        $message_field.text(data['error_text']);
+                    }
+                }
+            });
+        });
     });
 </script>
 </body>

@@ -87,20 +87,25 @@ if ($_POST['apiMethod'] === 'addToCart') {
     //Получаем данные из postData
     $product_id = $_POST['postData']['product_id'] ?? '';
 
+    $user_id = $_SESSION['login']['id'];
     $product = getProduct($product_id);
     $price = $product['price'];
     $discount = $product['discount'];
     $subtotal = $price * $discount;
 
 //пытаемся добавить товар в корзину
-    addToCart($product_id, $subtotal);
-    $cartItem = showCartItem($product_id);
+    $cartItem = showCartItem($product_id, $user_id);
+    (!isset($cartItem['quantity'])) ? addToCart($user_id, $product_id, $subtotal)
+        : error("Вы уже добавили данный товар.");
+    $cartItem = showCartItem($product_id, $user_id);
     (isset($cartItem['quantity'])) ? success("Товар с ID($product_id) добавлен в корзину.")
         : error('Что-то пошло не так');
 }
 
 //Обработка метода updateCart
 if ($_POST['apiMethod'] === 'updateCart') {
+
+    $user_id = $_SESSION['login']['id'];
 
     //Получаем данные из postData
     $id = $_POST['postData']['id'] ?? '';
@@ -109,7 +114,7 @@ if ($_POST['apiMethod'] === 'updateCart') {
     $product = getProduct($id);
     $price = $product['price'];
     $discount = $product['discount'];
-    updateCartItem($id, $quantity, $price, $discount);
+    updateCartItem($user_id, $id, $quantity, $price, $discount);
     success();
 }
 
@@ -117,15 +122,17 @@ if ($_POST['apiMethod'] === 'updateCart') {
 if ($_POST['apiMethod'] === 'removeFromCart') {
 
     //Получаем id товара из postData
-    $id = $_POST['postData']['id'] ?? '';
+    $product_id = $_POST['postData']['id'] ?? '';
 
-    $showCartItem = showCartItem($id);
+    $user_id = $_SESSION['login']['id'];
+
+    $showCartItem = showCartItem($product_id, $user_id);
 
 //если в корзине нет товара с полученным id
     if (!$showCartItem['product_id']) {
         error("Товар с ID($id) в корзине отсутствует");
     } else {
-        removeFromCart((int)$id);
+        removeFromCart($product_id, $user_id);
         success();
     }
 }
@@ -133,7 +140,8 @@ if ($_POST['apiMethod'] === 'removeFromCart') {
 //Обработка метода clearCart
 if ($_POST['apiMethod'] === 'clearCart') {
 
-    clearCart();
+    $user_id = $_SESSION['login']['id'];
+    clearCart($user_id);
     success();
 }
 
@@ -147,8 +155,11 @@ if ($_POST['apiMethod'] === 'createOrder') {
 
     $user_id = (int)$_SESSION['login']['id'];
 
+    $sql = "SELECT * FROM `cart` WHERE `user_id` = $user_id";
+    $cart = getCart($sql);
+
 //если корзина пуста выводим ошибку
-    if (empty($_COOKIE['cart'])) {
+    if (empty($cart)) {
         error("Корзина пуста");
         exit();
     }
@@ -165,9 +176,9 @@ if ($_POST['apiMethod'] === 'createOrder') {
 
 //генерируем запрос в БД
     $values = [];
-    foreach ($_COOKIE['cart'] as $productId => $amount) {
-        $productId = (int)$productId;
-        $amount = (int)$amount;
+    foreach ($cart as $product) {
+        $productId = $product['product_id'];
+        $amount = $product['quantity'];
         $values[] = "($orderId, $productId, $amount)";
     }
 
@@ -178,11 +189,7 @@ if ($_POST['apiMethod'] === 'createOrder') {
 //выполняем запрос
     if (execQuery($sql)) {
         //очищаем корзину
-        clearCart();
-        //очищаем куки корзины
-        foreach ($_COOKIE['cart'] as $productId => $amount) {
-            setcookie("cart[$productId]", null, -1, '/');
-        }
+        clearCart($user_id);
         success();
 //        success("Заказ успешно создан");
     } else {
